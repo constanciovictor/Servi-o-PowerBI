@@ -43,10 +43,10 @@ namespace LeitorXMLPowerBI.Models
         public string EntrySource { get; set; }
 
         [XmlElement("EntryLocation")]
-        public EntryLocation entryLocation { get; set; }
+        public List<EntryLocation> entryLocation { get; set; }
 
         [XmlElement("Task")]
-        public Task task { get; set; }
+        public List<Task> task { get; set; }
     }
 
     [XmlRoot("EntryLocation")]

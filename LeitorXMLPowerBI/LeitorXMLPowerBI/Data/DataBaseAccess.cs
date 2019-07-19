@@ -34,6 +34,7 @@ namespace LeitorXMLPowerBI.Data
 
                     SqlCommand cm = new SqlCommand(queryString, conn);
 
+                    //Header
                     cm.Parameters.Add("@EventType", SqlDbType.Int).Value = pw.EventType;
                     cm.Parameters.Add("@EventDate", SqlDbType.Date).Value = pw.EventDate;
                     cm.Parameters.Add("@EventDateAge", SqlDbType.Int).Value = pw.EventDateAge;
@@ -45,7 +46,10 @@ namespace LeitorXMLPowerBI.Data
                     cm.Parameters.Add("@EntryDateFromEpoch", SqlDbType.VarChar).Value = pw.EntryDateFromEpoch;
                     cm.Parameters.Add("@EntrySource", SqlDbType.VarChar).Value = pw.EntrySource;
 
-
+                    foreach (var item in pw.entryLocation)
+                    {
+                        
+                    }
 
 
                     cm.CommandType = CommandType.Text;           

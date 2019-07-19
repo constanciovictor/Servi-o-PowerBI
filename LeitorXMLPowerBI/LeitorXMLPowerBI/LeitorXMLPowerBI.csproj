@@ -91,7 +91,6 @@
     </Compile>
     <Compile Include="Models\FormXML.cs" />
     <Compile Include="Models\HeaderXML.cs" />
-    <Compile Include="Models\PowerBIXML.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
