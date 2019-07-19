@@ -89,7 +89,8 @@
     <Compile Include="LeitorXMLPowerBI.Designer.cs">
       <DependentUpon>LeitorXMLPowerBI.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\PontoXML.cs" />
+    <Compile Include="Models\FormXML.cs" />
+    <Compile Include="Models\HeaderXML.cs" />
     <Compile Include="Models\PowerBIXML.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
@@ -101,7 +102,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

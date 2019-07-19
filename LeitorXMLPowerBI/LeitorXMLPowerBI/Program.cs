@@ -20,6 +20,7 @@ using System.Xml;
 using LeitorXMLPowerBI.Models;
 using LeitorXMLPowerBI.Data;
 using System.Configuration;
+using System.Xml.Serialization;
 
 namespace LeitorXMLPowerBI
 {
@@ -32,38 +33,63 @@ namespace LeitorXMLPowerBI
         {
             foreach (string file in Directory.EnumerateFiles(ConfigurationManager.AppSettings["DiretorioLeitura"].ToString(), "*.xml"))
             {
+                var dt = new DatabaseAccess();
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(file);
 
-                while (xmlDoc.GetElementsByTagName("Files").Count > 0)
+                //while (xmlDoc.GetElementsByTagName("Files").Count > 0)
+                //{
+                //    var xml_node = xmlDoc.GetElementsByTagName("Files")[0];
+                //    xml_node.ParentNode.RemoveChild(xml_node);
+                //}
+
+                //while (xmlDoc.GetElementsByTagName("PreviousRelatedEntries").Count > 0)
+                //{
+                //    var xml_node = xmlDoc.GetElementsByTagName("PreviousRelatedEntries")[0];
+                //    xml_node.ParentNode.RemoveChild(xml_node);
+                //}
+
+                //while (xmlDoc.GetElementsByTagName("RelatedEntries").Count > 0)
+                //{
+                //    var xml_node = xmlDoc.GetElementsByTagName("RelatedEntries")[0];
+                //    xml_node.ParentNode.RemoveChild(xml_node);
+                //}
+
+                //#region Header
+
+                //var header = MontarHeaderXML(xmlDoc);
+
+                //#endregion
+
+                if (xmlDoc.GetElementsByTagName("Task").Count > 0)
                 {
-                    var xml_node = xmlDoc.GetElementsByTagName("Files")[0];
-                    xml_node.ParentNode.RemoveChild(xml_node);
+                    var OrdemServico = MontarHeaderXML(xmlDoc.OuterXml);
                 }
 
-                while (xmlDoc.GetElementsByTagName("PreviousRelatedEntries").Count > 0)
+                if (xmlDoc.GetElementsByTagName("Form").Count > 0)
                 {
-                    var xml_node = xmlDoc.GetElementsByTagName("PreviousRelatedEntries")[0];
-                    xml_node.ParentNode.RemoveChild(xml_node);
+                    if (xmlDoc.GetElementsByTagName("Form")[0].FirstChild.FirstChild.Value == "01")
+                    {
+                        var OrdemServico = MontarOrdemServicoXML(xmlDoc.GetElementsByTagName("Form")[0].OuterXml);
+                        dt.InserirOrdemServicoXML(OrdemServico);
+                    }
+                    else if (xmlDoc.GetElementsByTagName("Form")[0].FirstChild.FirstChild.Value == "02")
+                    {
+                        var OrdemServico = MontarOrdemServicoImpXML(xmlDoc.GetElementsByTagName("Form")[0].OuterXml);
+                        dt.InserirOrdemServicoImpXML(OrdemServico);
+                    }
+                    else if (xmlDoc.GetElementsByTagName("Form")[0].FirstChild.FirstChild.Value == "03")
+                    {
+                        var OrdemServico = MontarControleServicoXML(xmlDoc.GetElementsByTagName("Form")[0].OuterXml);
+                        dt.InserirControleServicoXML(OrdemServico);
+                    }
+                    else if (xmlDoc.GetElementsByTagName("Form")[0].FirstChild.FirstChild.Value == "04")
+                    {
+                        var OrdemServico = MontarControleServicoImpXML(xmlDoc.GetElementsByTagName("Form")[0].OuterXml);
+                        dt.InserirControleServicoImpXML(OrdemServico);
+                    }
+
                 }
-
-                while (xmlDoc.GetElementsByTagName("RelatedEntries").Count > 0)
-                {
-                    var xml_node = xmlDoc.GetElementsByTagName("RelatedEntries")[0];
-                    xml_node.ParentNode.RemoveChild(xml_node);
-                }
-
-                PowerBIXML pw = new PowerBIXML()
-                {   
-                    ID_TP_XML = Convert.ToInt32(xmlDoc.GetElementsByTagName("EntryType")[0].FirstChild.Value),                    
-                    DataInclusao = DateTime.Now,
-                    DataEvent = DateTime.ParseExact(xmlDoc.GetElementsByTagName("EventDate")[0].FirstChild.Value, "ddMMyyyyHHmmss", null),
-                    CdForm = xmlDoc.GetElementsByTagName("Form").Count > 0 ? Convert.ToInt32(xmlDoc.GetElementsByTagName("Form")[0].FirstChild.FirstChild.Value) : 0,
-                    XmlCompl = xmlDoc.InnerXml
-                };
-
-                var dt = new DatabaseAccess();
-                dt.InserirPontoXML(pw);
             }
 
 
@@ -88,6 +114,6 @@ namespace LeitorXMLPowerBI
                 new LeitorXMLPowerBI()
             };
             ServiceBase.Run(ServicesToRun);
-        }
+        }    
     }
 }
